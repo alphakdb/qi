@@ -1,0 +1,16 @@
+.vscode
+temp.*
+.env
+vendor
+src
+.qi/*.conf
+.qi/pids
+.qi/health
+.qi/index.lock.json
+.qi/qi.conf
+.qi.lock.json
+*lock*
+*stacks*
+*bkp
+logs
+data

@@ -1,0 +1,25 @@
+{
+  "description": "qi",
+  "maintainer": "alphakdb.com",
+  "packages": {
+    "ipc":         { "repo": "alphakdb/qi-ipc",      "ref": "main", "kind": "lib" },
+    "event":       { "repo": "alphakdb/qi-event",    "ref": "main", "kind": "lib" },
+    "cron":        { "repo": "alphakdb/qi-cron",     "ref": "main", "kind": "lib" },
+    "log":         { "repo": "alphakdb/qi-log",      "ref": "main", "kind": "lib" },
+    "proc":        { "repo": "alphakdb/qi-proc",     "ref": "main", "kind": "lib" },
+    "mon":         { "repo": "alphakdb/qi-mon",      "ref": "main", "kind": "lib" },
+    "tp":          { "repo": "alphakdb/qi-tp",       "ref": "main", "kind": "proc" },
+    "rdb":         { "repo": "alphakdb/qi-rdb",      "ref": "main", "kind": "proc" },
+    "wdb":         { "repo": "alphakdb/qi-wdb",      "ref": "main", "kind": "proc" },
+    "hdb":         { "repo": "alphakdb/qi-hdb",      "ref": "main", "kind": "proc" },
+    "hub":         { "repo": "alphakdb/qi-hub",      "ref": "main", "kind": "proc" },
+    "gw":          { "repo": "alphakdb/qi-gw",       "ref": "main", "kind": "proc" },
+    "alpaca":      { "repo": "alphakdb/qi-alpaca",   "ref": "main", "kind": "feed" },
+    "massive":     { "repo": "alphakdb/qi-massive",  "ref": "main", "kind": "feed" },
+    "binance":     { "repo": "alphakdb/qi-binance",  "ref": "main", "kind": "feed" },
+    "kraken":      { "repo": "alphakdb/qi-kraken",   "ref": "main", "kind": "feed" },
+    "deps-win":    { "repo": "alphakdb/qi-deps-win", "ref": "main", "kind": "env" },
+    "deps-mac":    { "repo": "alphakdb/qi-deps-mac", "ref": "main", "kind": "env" },
+    "cqi":         { "repo": "alphakdb/qi-cqi",      "ref": "main", "kind": "bin" }
+  }
+}
