@@ -121,6 +121,7 @@ load1schema:{[p]
   }
 
 loadschemas:{[pkg] load1schema each paths[path(pkgs pkg;`schemas);"*.csv"];}
+autostart:{if[getconf[`AUTO_START;0b]|`start in key opts;$[0~sf:@[get;`..start;0];'"No start function defined";sf[]]]}
 getopt:{$[(::)~o:opts x;"";o]}
 
 checkpackages:{[force]
@@ -143,7 +144,7 @@ parsecmd:{[cmd;subj]
     importx[`fetch;subj];
     if[not(src:pkgs subj)~dest:local`vendor,subj;info"Vendoring to ",spath dest;os.cp[src;dest]]];
   if[ex;exit 0];
-  if[not ishub::cmd=`hub;if[loadfromvendor[`full;cmd];:()]];
+  if[not ishub::cmd=`hub;if[loadfromvendor[`full;cmd];: autostart`;]];
   if[not[ishub]&count select from(pk:0!.qi.packages)where k=cmd;
     :import cmd];
   isproc::ishub|0<count a:select from pk where cmd like/:(string[k],'"*");
@@ -154,8 +155,7 @@ parsecmd:{[cmd;subj]
   import pkg:first a`k;
   if[not ishub;.proc.init cmd];
   @[get;` sv `,pkg,`init;::][];
-  if[getconf[`AUTO_START;0b]|`start in key opts;
-      $[0~sf:@[get;`..start;0];'"No start function defined";sf[]]];
+  autostart`;
   }
 
 os.ensuredir:{if[not exists x;system"mkdir ",$[WIN;"";"-p "],ospath x]};
