@@ -19,7 +19,6 @@
     "binance":     { "repo": "alphakdb/qi-binance",  "ref": "main", "kind": "feed" },
     "kraken":      { "repo": "alphakdb/qi-kraken",   "ref": "main", "kind": "feed" },
     "deps-win":    { "repo": "alphakdb/qi-deps-win", "ref": "main", "kind": "env" },
-    "deps-mac":    { "repo": "alphakdb/qi-deps-mac", "ref": "main", "kind": "env" },
-    "cqi":         { "repo": "alphakdb/qi-cqi",      "ref": "main", "kind": "bin" }
+    "deps-mac":    { "repo": "alphakdb/qi-deps-mac", "ref": "main", "kind": "env" }
   }
 }
