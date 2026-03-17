@@ -154,6 +154,10 @@ parsecmd:{[cmd;subj]
   if[cmd in ctrl;.proc[cmd]subj;if[not[WIN]&cmd=`up;system"sleep 0.3"];exit 0];
   import pkg:first a`k;
   if[not ishub;.proc.init cmd];
+  if[not null st:.proc.self.stackname;
+    loadconf(sd:.conf.STACKS;st;`stack);
+    loadconf(sd;st;pkg);
+    loadconf(sd;st;.proc.self.name)];
   @[get;` sv `,pkg,`init;::][];
   autostart`;
   }
