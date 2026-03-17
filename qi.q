@@ -216,7 +216,5 @@ tcounts:{`n xdesc([]t;n:(count get@)each t:tables x)}
 
 / (t)opts -> (typed) command line options as a dict
 topts:infer each opts:(1#.q),first each .Q.opt .z.x
-loadconf(.conf.QI_HOME;`qi);
-loadconf local`.qi`qi;
 import:importx`full
 {if[10=type x;.qi.parsecmd .`$(x;y)]}. .z.x 0 1;
