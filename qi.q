@@ -33,9 +33,10 @@ qihome:{path(.conf.QI_HOME;x)}
 exists:{not()~key path x}
 ext:{$[x like"*",y;x;`$tostr[x],y]}
 dotq:ext[;".q"]
-paths:{a where(last each` vs'a:(raze/){$[p~k:key p:path x;p;.z.s each` sv'p,'k where not k like".*"]}x)like tostr y}
+paths:{a where(last each` vs'a:(raze/){$[p~k:key p:path x;p;.z.s each` sv'p,'k where not k like".*"]}x)like tostr(),y}
+apaths:{$[11h=type d:key p:path x;raze p,.z.s each` sv/:p,/:d;d]}
 cp:{[src;targ] path[targ]0:read0 path src}
-
+deldir:hdel each desc apaths@
 / basic logging function
 print:{[typ;msg] -1 string[.z.p]," ",typ," ",string[.z.w]," ",$[10=abs type msg;msg;-3!msg];}
 {x set $[x=`fatal;{print[x;y];exit 1};print]string x}each`info`error`fatal;
