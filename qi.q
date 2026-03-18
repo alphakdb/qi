@@ -221,7 +221,6 @@ importx:{[mode;x]
         if[isexec&not WIN;@[system;"chmod +x ",sp;{error"Failed to set +x perms on ",x,": ",y}sp:spath p]]];
       }[name;repo;sha]each vfiles:exec path from treeInfo where typ like"blob"];
   if[vend:getconf[`AUTO_VENDOR;0];if[not exists pv:local`vendor,name;info"Vendoring to ",spath pv;os.cp[dir;pv]]];
-      /{[src;targ;f] path[(targ;f)]0:read0 path(src;f)}[dir;pv]each $[count vfiles;vfiles;key dir]]];
   loadpkg[mode;$[vend;pv;dir];name]}
 
 tcounts:{`n xdesc([]t;n:(count get@)each t:tables x)}
