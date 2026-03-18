@@ -86,8 +86,8 @@ loadconf:{if[exists p:ext[path x;".conf"];info".qi.loadconf ",spath p;.conf,:par
 
 / package management
 pkgs:1#.q;isproc:0b
-.qi.system:{[cmd] info cmd;get cmd}
-loadf:.qi.system"\\l ",spath@
+.qi.system:{[cmd] info cmd;system cmd}
+loadf:.qi.system"l ",spath@
 
 loadpkg:{[mode;p;name]
   pkgs[name]:p;
