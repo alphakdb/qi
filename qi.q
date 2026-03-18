@@ -128,7 +128,12 @@ getopt:{$[(::)~o:opts x;"";o]}
 
 checkpackages:{[force]
   if[force|not exists f:local`.qi`index.json;fetch[.conf.URL,".qi/index.json";f]];
-  if[not`packages in key`.qi;packages::update sha:{""}each i from readpkgs f]}
+  if[not`packages in key`.qi;
+    a:readpkgs f;
+    if[exists cf:local`.qi`custom.json;
+      a:a upsert readpkgs cf];
+    packages::update sha:{""}each i from a]
+  }
 
 getconf:{[name;default] $[(::)~v:.conf name;default;v]}
 loadfromvendor:{[mode;name] $[exists pv:local(`vendor;name);[loadpkg[mode;pv;tosym name];1b];0b]}
