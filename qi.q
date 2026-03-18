@@ -46,13 +46,13 @@ tryx:{[func;args;catch] $[`ERR~first r:.[func;args;{(`ERR;x)}];(0b;catch;r 1);(1
 try:{tryx[x;enlist y;z]}    / for monadic (1 arg) functions
 
 / web & json
-online:{first .qi.try[system;"curl --connect-timeout 1 1.1.1.1";0]}
+online:{first try[system;"curl --connect-timeout 1 1.1.1.1";0]}
 curl:{system("curl -fsSL ",$[count tk:.conf.TOKEN;"-H \"Authorization: Bearer ",tk,"\" ";""]),x}
 jcurl:.j.k raze curl@
 fetch:{[url;p]
   info "fetch: ",cmd:"curl -L -s -o ",(sp:ospath p)," ",url;
   path[p]1:0#0x;
-  if[not first r:.qi.try[system;cmd;0];
+  if[not first r:try[system;cmd;0];
     @[hdel;p;0];
     '$[online`;"Problem fetching ",sp,": ",r 2;"Tried to fetch ",sp, " but could not connect to the internet"],"\n"];
   system cmd;
@@ -87,13 +87,13 @@ loadconf:{if[exists p:ext[path x;".conf"];info".qi.loadconf ",spath p;.conf,:par
 / package management
 pkgs:1#.q;isproc:0b
 .qi.system:{[cmd] info cmd;system cmd}
-loadf:.qi.system"l ",spath@
+loadf:{.qi.system"l ",spath x}
 
 loadpkg:{[mode;p;name]
   pkgs[name]:p;
   if[`quit in key opts;-1 ospath p;exit 0];
   if[mode in`schemas`full;loadschemas name];
-  if[name in`cli;:.qi.info string[name]," installed"];
+  if[name in`cli;:info string[name]," installed"];
   if[WIN;if["feed"~packages[name;`kind];importx[`fetch;"deps-win"]]];
   if[mode=`full;
     loadconf(p;`defaults);
@@ -101,9 +101,8 @@ loadpkg:{[mode;p;name]
     loadconf local(`.qi;name);
     system"d .";
     loadf(p;dotq name);
+    if[exists p2:local(`src;name;` sv name,`q);loadf p2];
     if[name=`log;.qi,:.conf.LOGLEVELS#.log]];
-  loadf each .qi.paths[local`src`common;"*.q"];
-  loadf each .qi.paths[local`src,name;"*.q"];
   }
 
 frompkg:{[pkg;f]
@@ -112,6 +111,9 @@ frompkg:{[pkg;f]
     p:pkgs pkg];
   loadf(p;dotq f);
   }
+
+fromsrc:{[pkg;f] loadf local(`src;pkg;dotq f);}
+fromstacksrc:{[pkg;f] loadf(.conf.STACKS;.proc.self.stackname;`src;pkg;dotq f);}
 
 load1schema:{[p]
   info "load1schema ",tostr f:last` vs p;
@@ -147,7 +149,7 @@ parsecmd:{[cmd;subj]
       importx[`fetch]each flip(exec k from lx;`upgrade);
       fetch[.conf.URL,"qi.q";.z.f]]];
   if[cmd=`vendor;ex:1b;
-    if[not subj in exec k from .qi.packages;'"Unrecognized package: ",.qi.tostr subj];
+    if[not subj in exec k from .qi.packages;'"Unrecognized package: ",tostr subj];
     importx[`fetch;subj];
     if[not(src:pkgs subj)~dest:local`vendor,subj;info"Vendoring to ",spath dest;os.cp[src;dest]]];
   if[ex;exit 0];
@@ -155,7 +157,7 @@ parsecmd:{[cmd;subj]
   if[not[ishub]&count select from(pk:0!.qi.packages)where k=cmd;
     :import cmd];
   isproc::ishub|0<count a:select from pk where cmd like/:(string[k],'"*");
-  if[not isproc|cmd in`status,ctrl:`up`down`kill;'"Unrecognized command: ",.qi.tostr cmd];
+  if[not isproc|cmd in`status,ctrl:`up`down`kill;'"Unrecognized command: ",tostr cmd];
   import`proc;
   if[cmd=`status;.proc.showstatus subj;exit 0];
   if[cmd in ctrl;.proc[cmd]subj;if[not[WIN]&cmd=`up;system"sleep 0.3"];exit 0];
@@ -164,7 +166,10 @@ parsecmd:{[cmd;subj]
   if[not null st:.proc.self.stackname;
     loadconf(sd:.conf.STACKS;st;`stack);
     loadconf(sd;st;pkg);
-    loadconf(sd;st;.proc.self.name)];
+    loadconf(sd;st;nm:.proc.self.name);
+    if[exists p1:path(.conf.STACKS;st;`src;`common.q);loadf p1];
+    if[exists p2:path(.conf.STACKS;st;`src;pkg;` sv pkg,`q);loadf p2];
+    if[exists p3:path(.conf.STACKS;st;`src;pkg;` sv nm,`q);loadf p3]];
   @[get;` sv `,pkg,`init;::][];
   autostart`;
   }
@@ -215,7 +220,7 @@ importx:{[mode;x]
         fetch[url;p];
         if[isexec&not WIN;@[system;"chmod +x ",sp;{error"Failed to set +x perms on ",x,": ",y}sp:spath p]]];
       }[name;repo;sha]each vfiles:exec path from treeInfo where typ like"blob"];
-  if[vend:getconf[`AUTO_VENDOR;0];if[not .qi.exists pv:local`vendor,name;info"Vendoring to ",spath pv;os.cp[dir;pv]]];
+  if[vend:getconf[`AUTO_VENDOR;0];if[not exists pv:local`vendor,name;info"Vendoring to ",spath pv;os.cp[dir;pv]]];
       /{[src;targ;f] path[(targ;f)]0:read0 path(src;f)}[dir;pv]each $[count vfiles;vfiles;key dir]]];
   loadpkg[mode;$[vend;pv;dir];name]}
 
@@ -224,4 +229,6 @@ tcounts:{`n xdesc([]t;n:(count get@)each t:tables x)}
 / (t)opts -> (typed) command line options as a dict
 topts:infer each opts:(1#.q),first each .Q.opt .z.x
 import:importx`full
+\d .
+{if[.qi.exists p:.qi.local`src`common.q;.qi.loadf p]}[]
 {if[10=type x;.qi.parsecmd .`$(x;y)]}. .z.x 0 1;
