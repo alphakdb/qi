@@ -83,6 +83,7 @@ parseconf:{[p]
   (1#.q),a[`k]!infer each a`v}
 
 loadconf:{if[exists p:ext[path x;".conf"];info".qi.loadconf ",spath p;.conf,:parseconf[p],topts]}
+loadparams:{if[exists p:ext[path x;".params"];info".qi.loadparams ",spath p;.params,:parseconf[p],topts]}
 
 / package management
 pkgs:1#.q;isproc:0b
@@ -97,6 +98,7 @@ loadpkg:{[mode;p;name]
   if[WIN;if["feed"~packages[name;`kind];importx[`fetch;"deps-win"]]];
   if[mode=`full;
     loadconf(p;`defaults);
+    loadparams(p;`defaults);
     loadconf(.conf.QI_HOME;name);
     loadconf local(`.qi;name);
     system"d .";

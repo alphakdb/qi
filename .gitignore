@@ -4,4 +4,7 @@ stacks
 *bkp
 logs
 data
+vendor
+src
+.qi/*.json
 .env
