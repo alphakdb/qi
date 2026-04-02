@@ -17,6 +17,7 @@ HOME:env[`HOME;env[`USERPROFILE;"."]]
 LOCAL:hsym`$$[WIN;ssr[system"cd";"\\";"/"];first system"pwd"]
 .conf.STACKS:env[`QI_STACKS;1_string` sv LOCAL,`stacks]
 .conf.SCRIPTS:env[`QI_SCRIPTS;1_string` sv LOCAL,`scripts]
+.conf.STRATS:env[`QI_STRATS;1_string` sv LOCAL,`strategies]
 .conf.DATA:env[`QI_DATA;1_string` sv LOCAL,`data]
 
 / can override in ~/.qi/qi.conf or .qi/qi.conf
@@ -84,7 +85,7 @@ parseconf:{[p]
   (1#.q),a[`k]!infer each a`v}
 
 loadconf:{if[exists p:ext[path x;".conf"];info".qi.loadconf ",spath p;.conf,:parseconf[p],topts]}
-loadparams:{if[exists p:ext[path x;".params"];info".qi.loadparams ",spath p;.params,:parseconf[p],topts]}
+loadparams:{if[exists p:ext[path y;".params"];info".qi.loadparams ",-3!(x;p);sv[`;`.params,x]upsert parseconf[p],topts]}
 
 / package management
 pkgs:1#.q;isproc:0b
@@ -99,7 +100,7 @@ loadpkg:{[mode;p;name]
   if[WIN;if["feed"~packages[name;`kind];importx[`fetch;"deps-win"]]];
   if[mode=`full;
     loadconf(p;`defaults);
-    loadparams(p;`defaults);
+    /loadparams(p;`defaults);
     loadconf(.conf.QI_HOME;name);
     loadconf local(`.qi;name);
     system"d .";
