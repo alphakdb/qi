@@ -42,6 +42,7 @@ deldir:hdel each desc apaths@
 / basic logging function
 print:{[typ;msg] -1 string[.z.p]," ",typ," ",string[.z.w]," ",$[10=abs type msg;msg;-3!msg];}
 {x set $[x=`fatal;{print[x;y];exit 1};print]string x}each`info`error`fatal;
+checkdupes:{if[count w:where 1<>count each g:group x;'"Duplicates found: ",-3!w]}
 
 / try-catch
 tryx:{[func;args;catch] $[`ERR~first r:.[func;args;{(`ERR;x)}];(0b;catch;r 1);(1b;r;"")]}
@@ -65,7 +66,7 @@ formatj:{o:x in"{[";p:o-c:(n:next x)in"}]";l:o|c|x=",";w:("\""=prev x)&(x=":")&n
 readpkgs:{[p] ([]k:key a)!get a:readj[p]`packages}
 
 / config loading
-infer:{
+infer:{[x]
   if[(t:type x)in 0 98 99h;:.z.s each x];
   if[t<>10;:x];
   if[x~enlist"*";:"*"];
@@ -82,8 +83,11 @@ parseconf:{[p]
   s:trim @[s;where"#"in's;first"#"vs];
   if[count err:select from(a:flip`k`v!("S*";"=")0:s)where 0=count each v;
     show err;fatal"Badly formed ",1_string p];
-  (1#.q),a[`k]!infer each a`v}
+  d:@[get;".infer";1#.q];
+  /dbg;
+  (1#.q),exec k!{$[y in key x;x[y]z;.qi.infer z]}[d]'[k;ltrim v]from a}
 
+loadconfig:{if[exists p:ext[path z;".conf"];info".qi.loadconfig ",-3!(x;y;spath p);sv[`;x,y]upsert parseconf[p],topts]}
 loadconf:{if[exists p:ext[path x;".conf"];info".qi.loadconf ",spath p;.conf,:parseconf[p],topts]}
 loadparams:{if[exists p:ext[path y;".params"];info".qi.loadparams ",-3!(x;p);sv[`;`.params,x]upsert parseconf[p],topts]}
 
