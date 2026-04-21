@@ -79,8 +79,8 @@ infer:{[x]
 
 parseconf:{[p]
   s@:where(s:read0 p)like"[A-z]*";
-  s@:where 1=sum each s="=";
   s:trim @[s;where"#"in's;first"#"vs];
+  s@:where 1=sum each s="=";
   if[count err:select from(a:flip`k`v!("S*";"=")0:s)where 0=count each v;
     show err;fatal"Badly formed ",1_string p];
   d:@[get;".infer";1#.q];
