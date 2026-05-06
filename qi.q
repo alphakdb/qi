@@ -93,6 +93,7 @@ loadparams:{if[exists p:ext[path y;".params"];info".qi.loadparams ",-3!(x;p);sv[
 
 / package management
 pkgs:1#.q;isproc:0b
+propsuffix:{.qi.tostr[y],("";"_")"plib"~packages[` vs x]`kind}
 .qi.system:{[cmd] info cmd;system cmd}
 loadf:{.qi.system"l ",spath x}
 
@@ -108,7 +109,7 @@ loadpkg:{[mode;p;name]
     loadconf(.conf.QI_HOME;name);
     loadconf local(`.qi;name);
     system"d .";
-    loadf(p;dotq name);
+    loadf(p;propsuffix[name]dotq name);
     if[exists p2:local(`src;name;` sv name,`q);loadf p2];
     if[name=`log;.qi,:.conf.LOGLEVELS#.log]];
   }
@@ -117,7 +118,7 @@ frompkg:{[pkg;f]
   if[null p:pkgs pkg;
     importx[`fetch;pkg];
     p:pkgs pkg];
-  loadf(p;dotq f);
+  loadf(p;propsuffix[pkg]dotq f);
   }
 
 fromsrc:{[pkg;f] loadf local(`src;pkg;dotq f);}
@@ -193,12 +194,12 @@ os.cpfile:{[src;dst] system $[WIN;"copy ";"cp "],ospath[src]," ",ospath dst};
 readlock:{$[exists p:local`.qi`index.lock.json;(p;readpkgs p);(p;())]}
 
 importx:{[mode;x]
+  checkpackages 0b;
   if[not null pkgs name:first` vs first sx:(),tosym x;if[name in key`;:(::)]];
   option:last 1_sx;
   if[null name;assert];
   if[name in key`;:(::)];
   if[loadfromvendor[mode;name];:(::)];
-  checkpackages 0b;
   packages,:last lockf:readlock`;
   if[not count repo:(m:packages name)`repo;'string[name]," is not a valid package"];
   if[newlock:(upgrade:option=`upgrade)|not count osha:sha:m`sha;

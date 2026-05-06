@@ -9,6 +9,7 @@
     "proc":        { "repo": "alphakdb/qi-proc",     "ref": "main", "kind": "lib" },
     "mon":         { "repo": "alphakdb/qi-mon",      "ref": "main", "kind": "lib" },
     "ta":         { "repo": "alphakdb/qi-ta",      "ref": "main", "kind": "lib" },
+    "bt":         { "repo": "alphakdb/qi-bt",      "ref": "main", "kind": "plib" },
     "tp":          { "repo": "alphakdb/qi-tp",       "ref": "main", "kind": "proc" },
     "rdb":         { "repo": "alphakdb/qi-rdb",      "ref": "main", "kind": "proc" },
     "wdb":         { "repo": "alphakdb/qi-wdb",      "ref": "main", "kind": "proc" },
