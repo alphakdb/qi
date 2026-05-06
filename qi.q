@@ -17,7 +17,7 @@ HOME:env[`HOME;env[`USERPROFILE;"."]]
 LOCAL:hsym`$$[WIN;ssr[system"cd";"\\";"/"];first system"pwd"]
 .conf.STACKS:env[`QI_STACKS;1_string` sv LOCAL,`stacks]
 .conf.SCRIPTS:env[`QI_SCRIPTS;1_string` sv LOCAL,`scripts]
-.conf.STRATS:env[`QI_STRATS;1_string` sv LOCAL,`strategies]
+.conf.BT:env[`QI_BT;1_string` sv LOCAL,`bt]
 .conf.DATA:env[`QI_DATA;1_string` sv LOCAL,`data]
 
 / can override in ~/.qi/qi.conf or .qi/qi.conf
