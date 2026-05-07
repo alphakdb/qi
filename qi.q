@@ -42,7 +42,10 @@ deldir:hdel each desc apaths@
 / basic logging function
 print:{[typ;msg] -1 string[.z.p]," ",typ," ",string[.z.w]," ",$[10=abs type msg;msg;-3!msg];}
 {x set $[x=`fatal;{print[x;y];exit 1};print]string x}each`info`error`fatal;
-checkdupes:{if[count w:where 1<>count each g:group x;'"Duplicates found: ",-3!w]}
+checkdupes:{
+  if[count w:where 1<>count each g:group $[d:99=type x;key x;x];
+    show $[d;asc(0!x)where key[x]in w;w];-1"";
+    '"Duplicates found: ",y]}
 
 / try-catch
 tryx:{[func;args;catch] $[`ERR~first r:.[func;args;{(`ERR;x)}];(0b;catch;r 1);(1b;r;"")]}
