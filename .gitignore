@@ -10,3 +10,4 @@ src
 .env
 strategies
 bt
+*.secrets

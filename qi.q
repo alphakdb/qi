@@ -75,8 +75,10 @@ infer:{[x]
   if[x~enlist"*";:"*"];
   if[x like"'*'";:1_-1_x];
   if[x like"[A-z]";:x];
+  if[x like"[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]";:x];
   if[a~inter[a:-1_x]v:.Q.n," .:-";:get x];
   if[" "in x;:.z.s each" "vs x];
+  if[x~"2023-06-01";dbg];
   if[x[0 10]like"[1-2]D";if[not null p:"P"$x;:p]];
   $[":"=x 0;`$x;0=s:sum x="`";x;"`"<>x 0;x;`$1_$[s=1;x;"`"vs x]]}
 
