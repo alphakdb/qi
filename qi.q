@@ -78,7 +78,6 @@ infer:{[x]
   if[x like"[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]";:x];
   if[a~inter[a:-1_x]v:.Q.n," .:-";:get x];
   if[" "in x;:.z.s each" "vs x];
-  if[x~"2023-06-01";dbg];
   if[x[0 10]like"[1-2]D";if[not null p:"P"$x;:p]];
   $[":"=x 0;`$x;0=s:sum x="`";x;"`"<>x 0;x;`$1_$[s=1;x;"`"vs x]]}
 
@@ -159,7 +158,7 @@ clearregistry:{{$[exists p:local(`.qi;x);hdel p;`]}each`index.json`index.lock.js
 parsecmd:{[cmd;subj]
   checkpackages ex:any m:cmd in`update`refresh`upgrade;
   if[last m;  / upgrade
-    if[count lx:last lf:readlock`;
+    if[count lx:last readlock`;
       importx[`fetch]each flip(exec k from lx;`upgrade);
       fetch[.conf.URL,"qi.q";.z.f]]];
   if[cmd=`vendor;ex:1b;
