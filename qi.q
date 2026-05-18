@@ -93,6 +93,7 @@ parseconf:{[p]
 
 loadconfig:{if[exists p:ext[path z;".conf"];info".qi.loadconfig ",-3!(x;y;spath p);sv[`;x,y]upsert parseconf[p],topts]}
 loadconf:{if[exists p:ext[path x;".conf"];info".qi.loadconf ",spath p;.conf,:parseconf[p],topts]}
+loadsecrets:{if[exists p:ext[qihome`qi;".secrets"];info".qi.loadsecrets ",spath p;.conf,:parseconf[p],topts]}
 loadparams:{if[exists p:ext[path y;".params"];info".qi.loadparams ",-3!(x;p);sv[`;`.params,x]upsert parseconf[p],topts]}
 
 / package management
@@ -108,6 +109,7 @@ loadpkg:{[mode;p;name]
   if[name in`cli;:info string[name]," installed"];
   if[WIN;if["feed"~packages[name;`kind];importx[`fetch;"deps-win"]]];
   if[mode=`full;
+    loadsecrets[];
     loadconf(p;`defaults);
     /loadparams(p;`defaults);
     loadconf(.conf.QI_HOME;name);
